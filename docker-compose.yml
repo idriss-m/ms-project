@@ -1,0 +1,125 @@
+version: "2.2"
+services:
+  Etudiant:
+    build:  .\Etudiant
+    hostname: etudiant
+    ports:
+      - "8089:8001"
+    image: "etudiant"
+    depends_on:
+      - Eureka
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+  Classe:
+    build: .\Classe
+    hostname: classe
+    ports:
+      - "8088:8001"
+    image: "classe"
+    depends_on:
+      - Eureka
+      - Mongodb
+    environment:
+      # - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - SPRING_DATA_MONGODB_HOST=mongo
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://eureka:8761/eureka
+  Mongodb:
+    container_name: Mongo
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    hostname: mongo
+    depends_on:
+      - "Eureka"
+  Matiere:
+    build: .\Matiere
+    hostname: matiere
+    ports:
+      - "8087:8001"
+    image: "matiere"
+    environment:
+      - JAVA_OPTS=
+        -DMYSQL_SERVER=mysql-matiere
+        -DEUREKA_SERVER=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on: 
+      - Eureka
+      - MySQL-Matiere
+  MySQL-Matiere:
+    hostname: mysql-matiere
+    ports:
+      - "3307:3306"
+    image: "mysql"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=matiere
+    volumes:
+      - mysql-matiere-volume:/var/lib/mysql
+  Rapport:
+    build: .\Rapport
+    hostname: rapport
+    ports:
+      - "8086:8001"
+    image: "rapport"
+    depends_on:
+      - Eureka
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+  Instructeur:
+    hostname: instructeur
+    build: .\Instructeur
+    ports:
+      - "5000:5000"
+    image: "instructeur"
+    depends_on: 
+      - Eureka
+      - MySQL-Instructeur
+      - ConfigServer
+    environment:
+      - EUREKA_SERVER=eureka:8761
+      - CONFIG_SERVER=http://configserver:8888
+      - MYSQL_SERVER=mysql-instructeur:3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWD=root
+  MySQL-Instructeur:
+    hostname: mysql-instructeur
+    ports:
+      - "3308:3306"
+    image: "mysql"
+    cap_add:
+      - SYS_NICE
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=instructeur
+    volumes:
+      - mysql-instructeur-volume:/var/lib/mysql
+  Eureka:
+    build: .\EurekaServer
+    hostname: "eureka"
+    ports:
+      - "8761:8761"
+    image: "eureka"
+  Zuul:
+    container_name: zuul
+    image: "zuul-gateway"
+    build: ..\Zuul-gateway
+    ports:
+      - "8085:8763"
+    hostname: Zuul
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+    depends_on:
+      - "Eureka"
+  ConfigServer:
+    hostname: "configserver"
+    image: "configserver"
+    build: .\ConfigServer
+    ports:
+      - "8888:8888"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+volumes:
+  mysql-instructeur-volume:
+  mysql-matiere-volume:
