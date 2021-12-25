@@ -1,0 +1,4 @@
+FROM  java:8
+EXPOSE 8001
+ADD /target/Rapport-1.0.jar Rapport.jar 
+ENTRYPOINT ["java", "-jar", "Rapport.jar"]

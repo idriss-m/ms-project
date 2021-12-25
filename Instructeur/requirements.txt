@@ -1,0 +1,7 @@
+Flask==1.1.1
+Flask_SQLAlchemy==2.5.1
+marshmallow==3.14.1
+marshmallow_sqlalchemy==0.26.1
+py_eureka_client==0.10.2
+spring_config_client==0.2
+PyMySQL==1.0.2
