@@ -1,0 +1,4 @@
+FROM  java:8
+EXPOSE 8888
+ADD /target/ConfigServer-1.0.jar ConfigServer.jar 
+ENTRYPOINT ["java", "-jar", "ConfigServer.jar"]
