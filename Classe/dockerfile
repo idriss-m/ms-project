@@ -1,0 +1,4 @@
+FROM  java:8
+EXPOSE 8001
+ADD /target/Classe-1.0.jar classe.jar 
+ENTRYPOINT ["java", "-jar", "classe.jar"]
