@@ -3,7 +3,7 @@
 This is a "School management" project which uses the microservices design patter.
 ## Tech stack
 ### Backend Services
-* Sprintboot (Java 1.8)
+* Springboot (Java 1.8)
 * Flask (Python 3.8)
 
 ### Frontend
@@ -16,3 +16,11 @@ This is a "School management" project which uses the microservices design patter
 
 ### Configuration Server
 * SpringBoot ConfigServer
+
+## Services
+There are 5 backend services that contain our application logic:
+* Etudiant
+* Instructeur
+* Classe
+* Matiere
+* Rapport
