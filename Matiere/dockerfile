@@ -1,0 +1,4 @@
+FROM  java:8
+EXPOSE 8001
+ADD /target/Matiere-1.0.jar Matiere.jar 
+ENTRYPOINT ["java", "-jar", "Matiere.jar"]
